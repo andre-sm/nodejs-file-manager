@@ -1,14 +1,13 @@
-import { fileURLToPath } from 'url';
-import { dirname } from "path";
-import { stdin, stdout } from "process";
+import { stdin } from "process";
 import * as readline from 'readline/promises';
 import { getArgs } from './utils/getArgs.js';
+import { printCurrentDirectory, moveUP, goToDirectory } from './utils/manageDirectory.js';
 
 const startApp = async () => {
-    const __dirname = dirname(fileURLToPath(import.meta.url));
-
     const userName = getArgs('username') || 'Guest';
-    stdout.write(`Welcome to the File Manager, ${userName}!\n`);
+
+    console.log(`Welcome to the File Manager, ${userName}!`);
+    printCurrentDirectory();
 
     process.on('SIGINT', () => {
         closeProcess(userName);
@@ -17,17 +16,26 @@ const startApp = async () => {
     const readLine = readline.createInterface({ input: stdin });
 
     for await (const line of readLine) {
-        const currentLine = line.toString().trim();
-        if (currentLine === '.exit') {
-            closeProcess(userName);
-        } else {
-
+        const commandArray = line.toString().trim().split(' ');
+        
+        switch (commandArray[0]) {
+            case '.exit':
+                closeProcess(userName);
+                break;
+            case 'up':
+                await moveUP();
+                break;
+            case 'cd':
+                await goToDirectory(commandArray[1]);
+                break;
+            default:
+                console.error('Invalid input');
         }
     }
 };
 
 const closeProcess = (name) => {
-    stdout.write(`Thank you for using File Manager, ${name}, goodbye!\n`);
+    console.log(`Thank you for using File Manager, ${name}, goodbye!`);
     process.exit();
 };
 
