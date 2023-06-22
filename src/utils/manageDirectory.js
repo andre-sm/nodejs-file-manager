@@ -27,7 +27,7 @@ export const moveUP = async () => {
     }
 }
 
-export const goToDirectory = async (path = null) => {
+export const goToDirectory = async (path) => {
     try {
         if (!path) {
             throw new Error('Invalid input');
@@ -58,6 +58,7 @@ export const readDirectory = async () => {
             }
         });
         console.table([...folders.sort((a, b) => a - b), ...files.sort((a, b) => a - b)]);
+        printCurrentDirectory();
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');

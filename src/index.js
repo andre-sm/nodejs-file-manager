@@ -2,6 +2,10 @@ import { stdin } from "process";
 import * as readline from 'readline/promises';
 import { getArgs } from './utils/getArgs.js';
 import { printCurrentDirectory, moveUP, goToDirectory, readDirectory } from './utils/manageDirectory.js';
+import { readFile } from './utils/readFile.js';
+import { createFile } from './utils/createFile.js';
+import { renameFile } from './utils/renameFile.js';
+
 
 const startApp = async () => {
     const userName = getArgs('username') || 'Guest';
@@ -30,6 +34,15 @@ const startApp = async () => {
                 break;
             case 'ls':
                 await readDirectory();
+                break;
+            case 'cat':
+                await readFile(commandArray[1]);
+                break;
+            case 'add':
+                await createFile(commandArray[1]);
+                break;
+            case 'rn':
+                await renameFile(commandArray[1], commandArray[2]);
                 break;
             default:
                 console.error('Invalid input');
