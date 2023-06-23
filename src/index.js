@@ -8,6 +8,7 @@ import { renameFile } from './utils/renameFile.js';
 import { copyAndMoveFile } from './utils/copyAndMoveFile.js';
 import { deleteFile } from './utils/deleteFile.js';
 import { getOsInfo } from "./utils/getOsInfo.js";
+import { calcHash } from "./utils/calcHash.js";
 
 const startApp = async () => {
     const userName = getArgs('username') || 'Guest';
@@ -57,6 +58,9 @@ const startApp = async () => {
                 break;
             case 'os':
                 await getOsInfo(commandArray[1].slice(2));
+                break;  
+            case 'hash':
+                await calcHash(commandArray[1]);
                 break;  
             default:
                 console.error('Invalid input');
