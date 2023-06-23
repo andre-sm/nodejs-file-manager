@@ -5,6 +5,8 @@ import { printCurrentDirectory, moveUP, goToDirectory, readDirectory } from './u
 import { readFile } from './utils/readFile.js';
 import { createFile } from './utils/createFile.js';
 import { renameFile } from './utils/renameFile.js';
+import { copyAndMoveFile } from './utils/copyAndMoveFile.js';
+import { deleteFile } from './utils/deleteFile.js';
 
 
 const startApp = async () => {
@@ -44,6 +46,15 @@ const startApp = async () => {
             case 'rn':
                 await renameFile(commandArray[1], commandArray[2]);
                 break;
+            case 'cp':
+                await copyAndMoveFile(commandArray[1], commandArray[2]);
+                break;
+            case 'mv':
+                await copyAndMoveFile(commandArray[1], commandArray[2], true);
+                break;
+            case 'rm':
+                await deleteFile(commandArray[1]);
+                break;    
             default:
                 console.error('Invalid input');
         }

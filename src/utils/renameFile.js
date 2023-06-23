@@ -1,18 +1,18 @@
 import { rename, access } from "fs/promises";
-import { join } from "path";
+import { join, isAbsolute, dirname } from "path";
 import { getCurrentDirectory, printCurrentDirectory } from './manageDirectory.js';
 
-export const renameFile = async (filePath, newName) => {
+export const renameFile = async (filePath, newFileName) => {
     try {
-        if (!filePath || !newName) {
+        if (!filePath || !newFileName) {
             throw new Error('Invalid input');
         }
-        const currentDirectory = getCurrentDirectory(); 
-        const fileFullPath = join(currentDirectory, filePath);
-        const renamedFileFullPath = join(currentDirectory, newName);
 
-        await access(fileFullPath);
-        await rename(fileFullPath, renamedFileFullPath);
+        const fullFilePath = isAbsolute(filePath) ? filePath : join(getCurrentDirectory(), filePath);
+        await access(fullFilePath);
+        
+        const renamedFileFullPath = join(dirname(fullFilePath), newFileName);
+        await rename(fullFilePath, renamedFileFullPath);
         printCurrentDirectory();
     } catch (err) {
         if (err.code === 'ENOENT') {
