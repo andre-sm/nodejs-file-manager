@@ -25,7 +25,8 @@ const startApp = async () => {
     const readLine = readline.createInterface({ input: stdin });
 
     for await (const line of readLine) {
-        const commandArray = line.toString().trim().split(' ');
+        const hasQuotes = checkForQuotes(line);
+        const commandArray = splitCommand(line, hasQuotes);
 
         switch (commandArray[0]) {
             case '.exit':
@@ -79,6 +80,20 @@ const startApp = async () => {
 const closeProcess = (name) => {
     console.log(`Thank you for using File Manager, ${name}, goodbye!`);
     process.exit();
+};
+
+const checkForQuotes = (str) => {
+    return /['"]/.test(str);
+};
+
+const splitCommand = (str, hasQuotes) => {
+    if (hasQuotes) {
+        let firstQuoteIndex = str.search(/['"]/);
+        const firstPart = str.slice(0, firstQuoteIndex).split(' ');
+        const secondPart = str.slice(firstQuoteIndex).split(/['"]/);
+        return [...firstPart, ...secondPart].map(item => item.trim()).filter(item => item);
+    }
+    return str.trim().split(' ').filter(item => item);
 };
 
 await startApp();
