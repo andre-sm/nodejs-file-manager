@@ -9,6 +9,8 @@ import { copyAndMoveFile } from './utils/copyAndMoveFile.js';
 import { deleteFile } from './utils/deleteFile.js';
 import { getOsInfo } from "./utils/getOsInfo.js";
 import { calcHash } from "./utils/calcHash.js";
+import { compressFile } from "./utils/compressFile.js";
+import { decompressFile } from "./utils/decompressFile.js";
 
 const startApp = async () => {
     const userName = getArgs('username') || 'Guest';
@@ -61,6 +63,12 @@ const startApp = async () => {
                 break;  
             case 'hash':
                 await calcHash(commandArray[1]);
+                break;  
+            case 'compress':
+                await compressFile(commandArray[1], commandArray[2]);
+                break;
+            case 'decompress':
+                await decompressFile(commandArray[1], commandArray[2]);
                 break;  
             default:
                 console.error('Invalid input');
