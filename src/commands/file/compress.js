@@ -3,6 +3,8 @@ import { access } from 'fs/promises';
 import { join, isAbsolute, basename } from 'path';
 import { createBrotliCompress } from 'zlib';
 import * as directoryCommands from '../directory/index.js';
+import { directoryCheck } from '../../utils/directory-check.js';
+import { fileCheck } from '../../utils/file-check.js';
 
 export const compressFile = async (filePath, destinationPath) => {
     try {
@@ -16,6 +18,13 @@ export const compressFile = async (filePath, destinationPath) => {
 
         await access(fullFilePath);
         await access(fullDestinationPath);
+
+        const isFile = await fileCheck(fullFilePath);
+        const isDirectory = await directoryCheck(fullDestinationPath);
+
+        if (!isFile || !isDirectory) {
+            throw new Error('Operation failed');
+        } 
     
         const fileName = basename(filePath);
         const archivePath = join(fullDestinationPath, `${fileName}.br`);

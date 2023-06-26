@@ -2,6 +2,7 @@ import { createReadStream } from 'fs';
 import { access } from 'fs/promises';
 import { join, isAbsolute } from 'path';
 import * as directoryCommands from '../directory/index.js';
+import { fileCheck } from '../../utils/file-check.js';
 
 export const readFile = async (filePath) => {
     try {
@@ -11,7 +12,12 @@ export const readFile = async (filePath) => {
 
         const currentDirectory = directoryCommands.getCurrentDirectory(); 
         const fullFilePath = isAbsolute(filePath) ? filePath : join(currentDirectory, filePath);
+
         await access(fullFilePath);
+        const isFile = await fileCheck(fullFilePath);
+        if (!isFile) {
+            throw new Error('Operation failed');
+        } 
     
         const readStream = createReadStream(fullFilePath, 'utf-8');
     

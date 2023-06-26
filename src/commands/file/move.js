@@ -2,6 +2,8 @@ import { createReadStream, createWriteStream } from 'fs';
 import { access, unlink } from 'fs/promises';
 import { join, basename, isAbsolute } from 'path';
 import * as directoryCommands from '../directory/index.js';
+import { directoryCheck } from '../../utils/directory-check.js';
+import { fileCheck } from '../../utils/file-check.js';
 
 export const moveFile = async (filePath, copyPath) => {
     try {
@@ -15,6 +17,13 @@ export const moveFile = async (filePath, copyPath) => {
 
         await access(fullFilePath);
         await access(fullCopyPath);
+
+        const isFile = await fileCheck(fullFilePath);
+        const isDirectory = await directoryCheck(fullCopyPath);
+
+        if (!isFile || !isDirectory) {
+            throw new Error('Operation failed');
+        } 
         
         const fileName = basename(filePath);
         const fullCopyFilePath = join(fullCopyPath, fileName);

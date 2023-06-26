@@ -3,6 +3,7 @@ import { createReadStream } from 'fs';
 import { join, isAbsolute } from 'path';
 import { createHash } from 'crypto';
 import * as directoryCommands from '../directory/index.js';
+import { fileCheck } from '../../utils/file-check.js';
 
 export const calculateHash = async (filePath) => {
     try {
@@ -12,6 +13,11 @@ export const calculateHash = async (filePath) => {
 
         const fullFilePath = isAbsolute(filePath) ? filePath : join(directoryCommands.getCurrentDirectory(), filePath);
         await access(fullFilePath);
+
+        const isFile = await fileCheck(fullFilePath);
+        if (!isFile) {
+            throw new Error('Operation failed');
+        } 
     
         const hash = createHash('sha256');
         const readStream = createReadStream(fullFilePath);
