@@ -1,16 +1,16 @@
-import { access } from "fs/promises";
-import { createReadStream } from "fs";
-import { join, isAbsolute } from "path";
+import { access } from 'fs/promises';
+import { createReadStream } from 'fs';
+import { join, isAbsolute } from 'path';
 import { createHash } from 'crypto';
-import { getCurrentDirectory, printCurrentDirectory } from './manageDirectory.js';
+import * as directoryCommands from '../directory/index.js';
 
-export const calcHash = async (filePath) => {
+export const calculateHash = async (filePath) => {
     try {
         if (!filePath) {
             throw new Error('Invalid input');
         }
 
-        const fullFilePath = isAbsolute(filePath) ? filePath : join(getCurrentDirectory(), filePath);
+        const fullFilePath = isAbsolute(filePath) ? filePath : join(directoryCommands.getCurrentDirectory(), filePath);
         await access(fullFilePath);
     
         const hash = createHash('sha256');
@@ -22,7 +22,7 @@ export const calcHash = async (filePath) => {
         readStream.on('end', () => {
             const resultHash = hash.digest('hex');
             console.log(`Hash of the file: ${resultHash}`);
-            printCurrentDirectory();
+            directoryCommands.printCurrentDirectory();
         });
     } catch (err) {
         if (err.code === 'ENOENT') {

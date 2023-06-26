@@ -1,32 +1,33 @@
 import { EOL, cpus, homedir, userInfo, arch } from 'os';
-import { printCurrentDirectory } from './manageDirectory.js';
+import * as directoryCommands from '../directory/index.js';
 
 export const getOsInfo = async (arg) => {
     switch (arg) {
         case 'EOL':
             console.log(JSON.stringify(EOL));
-            printCurrentDirectory();
+            directoryCommands.printCurrentDirectory();
             break;
         case 'cpus':
             const cpusData = cpus();
             const cpusInfo = [`Amount of CPUS: ${cpusData.length}`];
             cpusData.forEach((cpu, i) => cpusInfo.push(`CPU${i + 1} model: ${cpu.model}`));
             console.log(cpusInfo.join('\n'));
-            printCurrentDirectory();
+            directoryCommands.printCurrentDirectory();
             break;
         case 'homedir':
             console.log(`Home directory: ${homedir()}`);
-            printCurrentDirectory();
+            directoryCommands.printCurrentDirectory();
             break;
         case 'username':
             console.log(`Current system user name: ${userInfo().username}`);
-            printCurrentDirectory();
+            directoryCommands.printCurrentDirectory();
             break;
         case 'architecture':
             console.log(`CPU architecture: ${arch()}`);
-            printCurrentDirectory();
+            directoryCommands.printCurrentDirectory();
             break;
         default:
             console.error('Invalid input');
+            directoryCommands.printCurrentDirectory();
     }
 }

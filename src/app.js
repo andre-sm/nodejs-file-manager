@@ -1,22 +1,15 @@
-import { stdin } from "process";
+import { stdin } from 'process';
 import * as readline from 'readline/promises';
-import { getArgs } from './utils/getArgs.js';
-import { printCurrentDirectory, moveUP, goToDirectory, readDirectory } from './utils/manageDirectory.js';
-import { readFile } from './utils/readFile.js';
-import { createFile } from './utils/createFile.js';
-import { renameFile } from './utils/renameFile.js';
-import { copyAndMoveFile } from './utils/copyAndMoveFile.js';
-import { deleteFile } from './utils/deleteFile.js';
-import { getOsInfo } from "./utils/getOsInfo.js";
-import { calcHash } from "./utils/calcHash.js";
-import { compressFile } from "./utils/compressFile.js";
-import { decompressFile } from "./utils/decompressFile.js";
+import * as fileCommands from './commands/file/index.js';
+import * as directoryCommands from './commands/directory/index.js';
+import { getArgs } from './utils/get-args.js';
+import { getOsInfo } from './commands/os/os-info.js';
 
 const startApp = async () => {
     const userName = getArgs('username') || 'Guest';
 
     console.log(`Welcome to the File Manager, ${userName}!`);
-    printCurrentDirectory();
+    directoryCommands.printCurrentDirectory();
 
     process.on('SIGINT', () => {
         closeProcess(userName);
@@ -33,46 +26,47 @@ const startApp = async () => {
                 closeProcess(userName);
                 break;
             case 'up':
-                await moveUP();
+                await directoryCommands.moveUP();
                 break;
             case 'cd':
-                await goToDirectory(commandArray[1]);
+                await directoryCommands.goToDirectory(commandArray[1]);
                 break;
             case 'ls':
-                await readDirectory();
+                await directoryCommands.readDirectory();
                 break;
             case 'cat':
-                await readFile(commandArray[1]);
+                await fileCommands.readFile(commandArray[1]);
                 break;
             case 'add':
-                await createFile(commandArray[1]);
+                await fileCommands.createFile(commandArray[1]);
                 break;
             case 'rn':
-                await renameFile(commandArray[1], commandArray[2]);
+                await fileCommands.renameFile(commandArray[1], commandArray[2]);
                 break;
             case 'cp':
-                await copyAndMoveFile(commandArray[1], commandArray[2]);
+                await fileCommands.copyFile(commandArray[1], commandArray[2]);
                 break;
             case 'mv':
-                await copyAndMoveFile(commandArray[1], commandArray[2], true);
+                await fileCommands.moveFile(commandArray[1], commandArray[2]);
                 break;
             case 'rm':
-                await deleteFile(commandArray[1]);
+                await fileCommands.deleteFile(commandArray[1]);
                 break;
             case 'os':
                 await getOsInfo(commandArray[1].slice(2));
                 break;  
             case 'hash':
-                await calcHash(commandArray[1]);
+                await fileCommands.calculateHash(commandArray[1]);
                 break;  
             case 'compress':
-                await compressFile(commandArray[1], commandArray[2]);
+                await fileCommands.compressFile(commandArray[1], commandArray[2]);
                 break;
             case 'decompress':
-                await decompressFile(commandArray[1], commandArray[2]);
+                await fileCommands.decompressFile(commandArray[1], commandArray[2]);
                 break;  
             default:
                 console.error('Invalid input');
+                directoryCommands.printCurrentDirectory();
         }
     }
 };

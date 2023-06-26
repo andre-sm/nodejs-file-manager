@@ -1,8 +1,8 @@
-import { createReadStream, createWriteStream } from "fs";
-import { access } from "fs/promises";
-import { join, isAbsolute, basename } from "path";
-import { getCurrentDirectory, printCurrentDirectory } from './manageDirectory.js';
-import { createBrotliCompress } from "zlib";
+import { createReadStream, createWriteStream } from 'fs';
+import { access } from 'fs/promises';
+import { join, isAbsolute, basename } from 'path';
+import { createBrotliCompress } from 'zlib';
+import * as directoryCommands from '../directory/index.js';
 
 export const compressFile = async (filePath, destinationPath) => {
     try {
@@ -10,7 +10,7 @@ export const compressFile = async (filePath, destinationPath) => {
             throw new Error('Invalid input');
         }
 
-        const currentDirectory = getCurrentDirectory(); 
+        const currentDirectory = directoryCommands.getCurrentDirectory(); 
         const fullFilePath = isAbsolute(filePath) ? filePath : join(currentDirectory, filePath);
         const fullDestinationPath = isAbsolute(destinationPath) ? destinationPath : join(currentDirectory, destinationPath);
 
@@ -24,7 +24,7 @@ export const compressFile = async (filePath, destinationPath) => {
         const readStream = createReadStream(fullFilePath);
         const archiveStream = createWriteStream(archivePath);
         readStream.pipe(brotli).pipe(archiveStream);
-        printCurrentDirectory();
+        directoryCommands.printCurrentDirectory();
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');

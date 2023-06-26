@@ -1,15 +1,15 @@
-import { createReadStream, createWriteStream } from "fs";
-import { access, unlink } from "fs/promises";
-import { join, basename, isAbsolute } from "path";
-import { getCurrentDirectory, printCurrentDirectory } from './manageDirectory.js';
+import { createReadStream, createWriteStream } from 'fs';
+import { access, unlink } from 'fs/promises';
+import { join, basename, isAbsolute } from 'path';
+import * as directoryCommands from '../directory/index.js';
 
-export const copyAndMoveFile = async (filePath, copyPath, isMoving = false) => {
+export const moveFile = async (filePath, copyPath) => {
     try {
         if (!filePath || !copyPath) {
             throw new Error('Invalid input');
         }
 
-        const currentDirectory = getCurrentDirectory(); 
+        const currentDirectory = directoryCommands.getCurrentDirectory(); 
         const fullFilePath = isAbsolute(filePath) ? filePath : join(currentDirectory, filePath);
         const fullCopyPath = isAbsolute(copyPath) ? copyPath : join(currentDirectory, copyPath);
 
@@ -24,10 +24,8 @@ export const copyAndMoveFile = async (filePath, copyPath, isMoving = false) => {
         readStream.pipe(writaStream);
 
         writaStream.on('finish', async () => {
-            if (isMoving) {
-                await unlink(fullFilePath);
-            }
-            printCurrentDirectory();
+            await unlink(fullFilePath);
+            directoryCommands.printCurrentDirectory();
         });
     } catch (err) {
         if (err.code === 'ENOENT') {

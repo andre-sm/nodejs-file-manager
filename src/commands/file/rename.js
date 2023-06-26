@@ -1,6 +1,6 @@
-import { rename, access } from "fs/promises";
-import { join, isAbsolute, dirname } from "path";
-import { getCurrentDirectory, printCurrentDirectory } from './manageDirectory.js';
+import { rename, access } from 'fs/promises';
+import { join, isAbsolute, dirname } from 'path';
+import * as directoryCommands from '../directory/index.js';
 
 export const renameFile = async (filePath, newFileName) => {
     try {
@@ -8,12 +8,12 @@ export const renameFile = async (filePath, newFileName) => {
             throw new Error('Invalid input');
         }
 
-        const fullFilePath = isAbsolute(filePath) ? filePath : join(getCurrentDirectory(), filePath);
+        const fullFilePath = isAbsolute(filePath) ? filePath : join(directoryCommands.getCurrentDirectory(), filePath);
         await access(fullFilePath);
         
         const renamedFileFullPath = join(dirname(fullFilePath), newFileName);
         await rename(fullFilePath, renamedFileFullPath);
-        printCurrentDirectory();
+        directoryCommands.printCurrentDirectory();
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');

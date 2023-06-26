@@ -1,6 +1,6 @@
-import { access, unlink } from "fs/promises";
-import { join, isAbsolute } from "path";
-import { getCurrentDirectory, printCurrentDirectory } from './manageDirectory.js';
+import { access, unlink } from 'fs/promises';
+import { join, isAbsolute } from 'path';
+import * as directoryCommands from '../directory/index.js';
 
 export const deleteFile = async (filePath) => {
     try {
@@ -8,12 +8,12 @@ export const deleteFile = async (filePath) => {
             throw new Error('Invalid input');
         } 
 
-        const currentDirectory = getCurrentDirectory(); 
+        const currentDirectory = directoryCommands.getCurrentDirectory(); 
         const fullFilePath = isAbsolute(filePath) ? filePath : join(currentDirectory, filePath);
 
         await access(fullFilePath);
         await unlink(fullFilePath);
-        printCurrentDirectory();
+        directoryCommands.printCurrentDirectory();
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
