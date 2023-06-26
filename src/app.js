@@ -10,6 +10,7 @@ const startApp = async () => {
 
     console.log(`Welcome to the File Manager, ${userName}!`);
     directoryCommands.printCurrentDirectory();
+    console.log('Please write a command');
 
     process.on('SIGINT', () => {
         closeProcess(userName);

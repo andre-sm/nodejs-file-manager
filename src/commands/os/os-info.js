@@ -12,7 +12,7 @@ export const getOsInfo = async (arg) => {
             const cpusInfo = [`Amount of CPUS: ${cpusData.length}`];
             cpusData.forEach((cpu, i) => {
                 const speed = (cpu.speed / 1000).toFixed(3);
-                cpusInfo.push(`CPU${i + 1} model: ${cpu.model}, speed: ${speed} GHz`);
+                cpusInfo.push(`CPU${i + 1} model: ${cpu.model}, clock rate: ${speed} GHz`);
             });
             console.log(cpusInfo.join('\n'));
             directoryCommands.printCurrentDirectory();
