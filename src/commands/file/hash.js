@@ -30,5 +30,6 @@ export const calculateHash = async (filePath) => {
         } else {
             console.error(err.message);
         }
+        directoryCommands.printCurrentDirectory();
     }
 };

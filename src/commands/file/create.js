@@ -9,8 +9,10 @@ export const createFile = async (fileName) => {
         } 
         const fullFilePath = join(directoryCommands.getCurrentDirectory(), fileName);
         await writeFile(fullFilePath, '');
-        directoryCommands.printCurrentDirectory();
+        console.log('File was created!');
     } catch (err) {
         console.error(err.message);
+    } finally {
+        directoryCommands.printCurrentDirectory();
     }
 };

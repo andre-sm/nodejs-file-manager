@@ -23,12 +23,16 @@ export const copyFile = async (filePath, copyPath) => {
         const writaStream = createWriteStream(fullCopyFilePath);
         readStream.pipe(writaStream);
 
-        writaStream.on('finish', directoryCommands.printCurrentDirectory());
+        writaStream.on('finish', () => {
+            console.log('File was copied!');
+            directoryCommands.printCurrentDirectory();
+        });
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
         } else {
             console.error(err.message);
         }
+        directoryCommands.printCurrentDirectory();
     }
 };

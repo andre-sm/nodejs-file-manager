@@ -24,12 +24,14 @@ export const decompressFile = async (archivePath, destinationPath) => {
         const readStream = createReadStream(fullArchivePath);
         const archiveStream = createWriteStream(decompressFilePath);
         readStream.pipe(brotli).pipe(archiveStream);
-        directoryCommands.printCurrentDirectory();
+        console.log('File was decompressed!');
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
         } else {
             console.error(err.message);
         }
+    } finally {
+        directoryCommands.printCurrentDirectory();
     }
 };

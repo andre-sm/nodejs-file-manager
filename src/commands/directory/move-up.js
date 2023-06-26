@@ -1,18 +1,19 @@
 import { join } from 'path';
 import { access } from 'fs/promises';
-import { printCurrentDirectory, getCurrentDirectory, setCurrentDirectory } from './current-directory.js';
+import * as directoryCommands from './index.js';
 
 export const moveUP = async () => {
     try {
-        const newDirectory = join(getCurrentDirectory(), '../');
+        const newDirectory = join(directoryCommands.getCurrentDirectory(), '../');
         await access(newDirectory);
-        setCurrentDirectory(newDirectory);
-        printCurrentDirectory();
+        directoryCommands.setCurrentDirectory(newDirectory);
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
         } else {
             console.error(err.message);
         }
+    } finally {
+        directoryCommands.printCurrentDirectory();
     }
 }

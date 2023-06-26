@@ -25,6 +25,7 @@ export const moveFile = async (filePath, copyPath) => {
 
         writaStream.on('finish', async () => {
             await unlink(fullFilePath);
+            console.log('File was moved!');
             directoryCommands.printCurrentDirectory();
         });
     } catch (err) {
@@ -33,5 +34,6 @@ export const moveFile = async (filePath, copyPath) => {
         } else {
             console.error(err.message);
         }
+        directoryCommands.printCurrentDirectory();
     }
 };

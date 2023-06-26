@@ -24,12 +24,14 @@ export const compressFile = async (filePath, destinationPath) => {
         const readStream = createReadStream(fullFilePath);
         const archiveStream = createWriteStream(archivePath);
         readStream.pipe(brotli).pipe(archiveStream);
-        directoryCommands.printCurrentDirectory();
+        console.log('File was compressed!');
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
         } else {
             console.error(err.message);
-        }
+        } 
+    } finally {
+        directoryCommands.printCurrentDirectory();
     }
 };

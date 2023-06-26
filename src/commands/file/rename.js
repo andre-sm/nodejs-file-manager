@@ -13,12 +13,14 @@ export const renameFile = async (filePath, newFileName) => {
         
         const renamedFileFullPath = join(dirname(fullFilePath), newFileName);
         await rename(fullFilePath, renamedFileFullPath);
-        directoryCommands.printCurrentDirectory();
+        console.log('File was renamed!');
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
         } else {
             console.error(err.message);
         }
+    } finally {
+        directoryCommands.printCurrentDirectory();
     }
 };

@@ -13,12 +13,14 @@ export const deleteFile = async (filePath) => {
 
         await access(fullFilePath);
         await unlink(fullFilePath);
-        directoryCommands.printCurrentDirectory();
+        console.log('File was deleted!');
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
         } else {
             console.error(err.message);
         }
+    } finally {
+        directoryCommands.printCurrentDirectory();
     }
 };
