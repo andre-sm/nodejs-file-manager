@@ -13,7 +13,12 @@ export const readDirectory = async () => {
                 files.push({ 'Name': item.name, 'Type': 'file' });
             }
         });
-        console.table([...folders.sort((a, b) => a - b), ...files.sort((a, b) => a - b)]);
+        const dataToPrint = [...folders.sort((a, b) => a - b), ...files.sort((a, b) => a - b)];
+        if (dataToPrint.length > 0) {
+            console.table(dataToPrint);
+        } else {
+            console.log('Directory is empty!');
+        }
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.error('Operation failed');
