@@ -55,7 +55,7 @@ const startApp = async () => {
                     await fileCommands.deleteFile(commandArray[1]);
                     break;
                 case 'os':
-                    await getOsInfo(commandArray[1].slice(2));
+                    await getOsInfo(commandArray.slice(1));
                     break;  
                 case 'hash':
                     await fileCommands.calculateHash(commandArray[1]);
