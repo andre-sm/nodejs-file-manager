@@ -27,6 +27,11 @@ export const copyFile = async (filePath, copyPath) => {
         const fileName = basename(filePath);
         const fullCopyFilePath = join(fullCopyPath, fileName);
 
+        const isAlreadyExist = await utils.fileCheck(fullCopyFilePath);
+        if (isAlreadyExist) {
+            throw new Error('Operation failed');
+        }
+
         const readStream = createReadStream(fullFilePath, 'utf-8');
         const writaStream = createWriteStream(fullCopyFilePath);
         readStream.pipe(writaStream);
