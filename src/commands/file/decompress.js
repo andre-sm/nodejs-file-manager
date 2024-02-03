@@ -3,8 +3,7 @@ import { access } from 'fs/promises';
 import { join, isAbsolute, parse } from 'path';
 import { createBrotliDecompress } from 'zlib';
 import * as directoryCommands from '../directory/index.js';
-import { directoryCheck } from '../../utils/directory-check.js';
-import { fileCheck } from '../../utils/file-check.js';
+import * as utils from '../../utils/index.js';
 
 export const decompressFile = async (archivePath, destinationPath) => {
     try {
@@ -19,8 +18,8 @@ export const decompressFile = async (archivePath, destinationPath) => {
         await access(fullArchivePath);
         await access(fullDestinationPath);
 
-        const isFile = await fileCheck(fullArchivePath);
-        const isDirectory = await directoryCheck(fullDestinationPath);
+        const isFile = await utils.fileCheck(fullArchivePath);
+        const isDirectory = await utils.directoryCheck(fullDestinationPath);
 
         if (!isFile || !isDirectory) {
             throw new Error('Operation failed');

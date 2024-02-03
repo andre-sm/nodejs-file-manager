@@ -2,30 +2,30 @@ import { stdin } from 'process';
 import * as readline from 'readline/promises';
 import * as fileCommands from './commands/file/index.js';
 import * as directoryCommands from './commands/directory/index.js';
-import { getArgs } from './utils/get-args.js';
 import { getOsInfo } from './commands/os/os-info.js';
+import * as utils from './utils/index.js';
 
 const startApp = async () => {
     try {
-        const userName = getArgs('username') || 'Guest';
+        const userName = utils.getArgs('username') || 'Guest';
 
         console.log(`Welcome to the File Manager, ${userName}!`);
         directoryCommands.printCurrentDirectory();
         console.log('Please write a command');
 
         process.on('SIGINT', () => {
-            closeProcess(userName);
+            utils.closeProcess(userName);
         });
         
         const readLine = readline.createInterface({ input: stdin });
 
         for await (const line of readLine) {
-            const hasQuotes = checkForQuotes(line);
-            const commandArray = splitCommand(line, hasQuotes);
+            const hasQuotes = utils.checkForQuotes(line);
+            const commandArray = utils.splitCommand(line, hasQuotes);
 
             switch (commandArray[0]) {
                 case '.exit':
-                    closeProcess(userName);
+                    utils.closeProcess(userName);
                     break;
                 case 'up':
                     await directoryCommands.moveUP();
@@ -74,25 +74,6 @@ const startApp = async () => {
     } catch (err) {
         console.error(err.message);
     }
-};
-
-const closeProcess = (name) => {
-    console.log(`Thank you for using File Manager, ${name}, goodbye!`);
-    process.exit();
-};
-
-const checkForQuotes = (str) => {
-    return /['"]/.test(str);
-};
-
-const splitCommand = (str, hasQuotes) => {
-    if (hasQuotes) {
-        let firstQuoteIndex = str.search(/['"]/);
-        const firstPart = str.slice(0, firstQuoteIndex).split(' ');
-        const secondPart = str.slice(firstQuoteIndex).split(/['"]/);
-        return [...firstPart, ...secondPart].map(item => item.trim()).filter(item => item);
-    }
-    return str.trim().split(' ').filter(item => item);
 };
 
 await startApp();

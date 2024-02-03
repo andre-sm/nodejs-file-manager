@@ -1,7 +1,7 @@
 import { rename, access } from 'fs/promises';
 import { join, isAbsolute, dirname } from 'path';
 import * as directoryCommands from '../directory/index.js';
-import { fileCheck } from '../../utils/file-check.js';
+import * as utils from '../../utils/index.js';
 
 export const renameFile = async (filePath, newFileName) => {
     try {
@@ -12,7 +12,7 @@ export const renameFile = async (filePath, newFileName) => {
         const fullFilePath = isAbsolute(filePath) ? filePath : join(directoryCommands.getCurrentDirectory(), filePath);
         await access(fullFilePath);
 
-        const isFile = await fileCheck(fullFilePath);
+        const isFile = await utils.fileCheck(fullFilePath);
         if (!isFile) {
             throw new Error('Operation failed');
         }
