@@ -20,6 +20,11 @@ const startApp = async () => {
         const readLine = readline.createInterface({ input: stdin });
 
         for await (const line of readLine) {
+            if (line.trim() === '') {
+                directoryCommands.printCurrentDirectory();
+                continue;
+            }
+
             const hasQuotes = utils.checkForQuotes(line);
             const commandArray = utils.splitCommand(line, hasQuotes);
 
