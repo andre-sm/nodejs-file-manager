@@ -29,7 +29,7 @@ export const decompressFile = async (archivePath, destinationPath) => {
 
         const isAlreadyExist = await utils.fileCheck(decompressFilePath);
         if (isAlreadyExist) {
-            throw new Error('Operation failed');
+            throw new Error('Operation failed: file already exists');
         }
 
         const brotli = createBrotliDecompress();

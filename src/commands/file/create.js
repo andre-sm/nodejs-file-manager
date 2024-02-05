@@ -12,7 +12,7 @@ export const createFile = async (fileName) => {
 
         const isAlreadyExist = await utils.fileCheck(fullFilePath);
         if (isAlreadyExist) {
-            throw new Error('Operation failed');
+            throw new Error('Operation failed: file already exists');
         }
 
         await writeFile(fullFilePath, '');

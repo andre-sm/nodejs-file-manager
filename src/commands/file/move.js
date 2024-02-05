@@ -28,7 +28,7 @@ export const moveFile = async (filePath, copyPath) => {
 
         const isAlreadyExist = await utils.fileCheck(fullCopyFilePath);
         if (isAlreadyExist) {
-            throw new Error('Operation failed');
+            throw new Error('Operation failed: file already exists');
         }
 
         const readStream = createReadStream(fullFilePath, 'utf-8');

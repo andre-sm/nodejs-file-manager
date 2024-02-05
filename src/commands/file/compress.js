@@ -29,7 +29,7 @@ export const compressFile = async (filePath, destinationPath) => {
 
         const isAlreadyExist = await utils.fileCheck(archivePath);
         if (isAlreadyExist) {
-            throw new Error('Operation failed');
+            throw new Error('Operation failed: file already exists');
         }
 
         const brotli = createBrotliCompress();
