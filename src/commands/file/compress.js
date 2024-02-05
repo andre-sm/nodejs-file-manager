@@ -27,6 +27,11 @@ export const compressFile = async (filePath, destinationPath) => {
         const fileName = basename(filePath);
         const archivePath = join(fullDestinationPath, `${fileName}.br`);
 
+        const isAlreadyExist = await utils.fileCheck(archivePath);
+        if (isAlreadyExist) {
+            throw new Error('Operation failed');
+        }
+
         const brotli = createBrotliCompress();
         const readStream = createReadStream(fullFilePath);
         const archiveStream = createWriteStream(archivePath);

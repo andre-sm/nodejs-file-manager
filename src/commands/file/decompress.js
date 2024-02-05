@@ -27,6 +27,11 @@ export const decompressFile = async (archivePath, destinationPath) => {
         const fileName = parse(archivePath).name;
         const decompressFilePath = join(fullDestinationPath, fileName);
 
+        const isAlreadyExist = await utils.fileCheck(decompressFilePath);
+        if (isAlreadyExist) {
+            throw new Error('Operation failed');
+        }
+
         const brotli = createBrotliDecompress();
         const readStream = createReadStream(fullArchivePath);
         const archiveStream = createWriteStream(decompressFilePath);
