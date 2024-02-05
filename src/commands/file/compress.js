@@ -1,6 +1,6 @@
 import { createReadStream, createWriteStream } from 'fs';
 import { access } from 'fs/promises';
-import { join, isAbsolute, basename } from 'path';
+import { join, basename } from 'path';
 import { createBrotliCompress } from 'zlib';
 import * as directoryCommands from '../directory/index.js';
 import * as utils from '../../utils/index.js';
@@ -11,9 +11,8 @@ export const compressFile = async (filePath, destinationPath) => {
             throw new Error('Invalid input');
         }
 
-        const currentDirectory = directoryCommands.getCurrentDirectory(); 
-        const fullFilePath = isAbsolute(filePath) ? filePath : join(currentDirectory, filePath);
-        const fullDestinationPath = isAbsolute(destinationPath) ? destinationPath : join(currentDirectory, destinationPath);
+        const fullFilePath = utils.getFullPath(filePath);
+        const fullDestinationPath = utils.getFullPath(destinationPath);
 
         await access(fullFilePath);
         await access(fullDestinationPath);

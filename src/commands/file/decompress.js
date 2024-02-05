@@ -1,6 +1,6 @@
 import { createReadStream, createWriteStream } from 'fs';
 import { access } from 'fs/promises';
-import { join, isAbsolute, parse } from 'path';
+import { join, parse } from 'path';
 import { createBrotliDecompress } from 'zlib';
 import * as directoryCommands from '../directory/index.js';
 import * as utils from '../../utils/index.js';
@@ -11,9 +11,8 @@ export const decompressFile = async (archivePath, destinationPath) => {
             throw new Error('Invalid input');
         }
 
-        const currentDirectory = directoryCommands.getCurrentDirectory(); 
-        const fullArchivePath = isAbsolute(archivePath) ? archivePath : join(currentDirectory, archivePath);
-        const fullDestinationPath = isAbsolute(destinationPath) ? destinationPath : join(currentDirectory, destinationPath);
+        const fullArchivePath = utils.getFullPath(archivePath);
+        const fullDestinationPath = utils.getFullPath(destinationPath);
 
         await access(fullArchivePath);
         await access(fullDestinationPath);

@@ -1,15 +1,15 @@
-import { join, isAbsolute } from 'path';
 import { access } from 'fs/promises';
 import * as directoryCommands from './index.js';
 import { directoryCheck } from '../../utils/directory-check.js';
+import * as utils from '../../utils/index.js';
 
 export const goToDirectory = async (path) => {
     try {
         if (!path) {
             throw new Error('Invalid input');
         }
-        const currentDirectory = directoryCommands.getCurrentDirectory(); 
-        const fullDirectoryPath = isAbsolute(path) ? path : join(currentDirectory, path);
+
+        const fullDirectoryPath = utils.getFullPath(path);
         await access(fullDirectoryPath);
 
         const isDirectory = await directoryCheck(fullDirectoryPath);

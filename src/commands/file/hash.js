@@ -1,6 +1,5 @@
 import { access } from 'fs/promises';
 import { createReadStream } from 'fs';
-import { join, isAbsolute } from 'path';
 import { createHash } from 'crypto';
 import * as directoryCommands from '../directory/index.js';
 import * as utils from '../../utils/index.js';
@@ -11,7 +10,7 @@ export const calculateHash = async (filePath) => {
             throw new Error('Invalid input');
         }
 
-        const fullFilePath = isAbsolute(filePath) ? filePath : join(directoryCommands.getCurrentDirectory(), filePath);
+        const fullFilePath = utils.getFullPath(filePath);
         await access(fullFilePath);
 
         const isFile = await utils.fileCheck(fullFilePath);
